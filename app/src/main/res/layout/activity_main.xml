@@ -8,6 +8,19 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textViewHistory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCalculation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:padding="10dp"
+        android:gravity="bottom|right"
+        android:textAlignment="gravity"/>
+
+    <TextView
         android:id="@+id/textViewCalculation"
 
         android:layout_width="match_parent"
@@ -16,9 +29,9 @@
         app:layout_constraintBottom_toTopOf="@id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textAlignment="viewEnd" />
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -62,7 +75,8 @@
 
         <Button
             android:id="@+id/btnDivide"
-            android:text="/" />
+            android:text="/"
+            android:onClick="btnClickNum"/>
 
         <Button
             android:id="@+id/btn4"
@@ -81,7 +95,8 @@
 
         <Button
             android:id="@+id/btnMultiply"
-            android:text="*" />
+            android:text="*"
+            android:onClick="btnClickNum"/>
 
         <Button
             android:id="@+id/btn1"
@@ -100,7 +115,8 @@
 
         <Button
             android:id="@+id/btnSubtract"
-            android:text="-" />
+            android:text="-"
+            android:onClick="btnClickNum"/>
 
         <Button
             android:id="@+id/btn0"
@@ -116,7 +132,9 @@
 
         <Button
             android:id="@+id/btnAdd"
-            android:text="+" />
+            android:text="+"
+            android:onClick="btnClickNum"/>
+
 
         <Button
             android:id="@+id/btnMemoryRead"
@@ -128,11 +146,13 @@
 
         <Button
             android:id="@+id/btnEnter"
-            android:text="⏎" />
+            android:text="⏎"
+            android:onClick="btnClickEnter"/>
 
         <Button
             android:id="@+id/btnEquals"
-            android:text="=" />
+            android:text="="
+            android:onClick="btnClickEquals"/>
 
     </GridLayout>
 
