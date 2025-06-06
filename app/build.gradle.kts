@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.armitage.calculator"
+    namespace = "com.armitage.calculatorapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.armitage.calculator"
+        applicationId = "com.armitage.calculatorapp"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.armitage.calculator
+package com.armitage.calculatorapp
 
 import org.junit.Test
 

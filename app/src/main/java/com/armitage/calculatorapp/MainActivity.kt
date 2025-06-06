@@ -1,29 +1,53 @@
-package com.armitage.calculator
+package com.armitage.calculatorapp
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.notkamui.keval.Keval
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.tan
+import androidx.core.view.isGone
 
 class MainActivity : AppCompatActivity() {
 
     var calculationStack = mutableListOf<String>()
+    private val memory = mutableListOf<String>("0", "0")
+
     lateinit var textViewCalculation: TextView
     lateinit var textViewHistory: TextView
+
+    lateinit var scientificFunction: TableRow
+
     var stringBuilder = StringBuilder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
         textViewCalculation = findViewById(R.id.textViewCalculation)
         textViewHistory = findViewById(R.id.textViewHistory)
+
+        scientificFunction = findViewById(R.id.scientificFunctions)
+
+        val memorySaveBtn = findViewById<Button>(R.id.btnMemorySave)
+        memorySaveBtn.setOnClickListener { saveToMemory(0) }
+        memorySaveBtn.setOnLongClickListener { saveToMemory(1) }
+
+        val memoryReadBtn = findViewById<Button>(R.id.btnMemoryRead)
+        memoryReadBtn.setOnClickListener {
+            readFromMemory(0)
+        }
+        memoryReadBtn.setOnLongClickListener {
+            readFromMemory(1)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -32,6 +56,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuSettings -> {
+                //TODO make buttons visible
+                if (scientificFunction.isGone) scientificFunction.visibility = View.VISIBLE
+                else scientificFunction.visibility = View.GONE
+                true
+            } else -> super.onOptionsItemSelected(item)
+        }
     }
 
     /**
@@ -80,6 +119,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun btnClickClear(view: View) {
+        stringBuilder.append(textViewCalculation.text.toString())
+        if(stringBuilder.isNotEmpty()){
+            stringBuilder.deleteCharAt(stringBuilder.length - 1);
+        }
+        textViewCalculation.text = stringBuilder.toString()
+        stringBuilder.clear()
+    }
+    fun btnClickClearEverything(view: View) {
+        textViewCalculation.text = ""
+    }
+
+    // TODO only works if the operation is in the first 3 places in the stack, needs to be adjusted to work with longer terms
+    // TODO throw errors if the term is not a calculable
     private fun calculateEquation (calculationStack : MutableList<String>) : MutableList<String>{
         var i :Int = 0
         while (calculationStack.size > 1){
@@ -129,6 +182,21 @@ class MainActivity : AppCompatActivity() {
         }
         return 0.0
     }
+    
+    private fun saveToMemory(int: Int): Boolean {
+        memory[int] = textViewCalculation.text.toString()
+        return true
+    }
+    private fun readFromMemory(int: Int): Boolean {
+        stringBuilder.append(textViewCalculation.text)
+        stringBuilder.append(memory[int])
+        textViewCalculation.text = stringBuilder.toString()
+        stringBuilder.clear()
+        return true
+    }
+
+
+    
 }
 
 

@@ -7,18 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <TextView
         android:id="@+id/textViewHistory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="bottom|right"
+        android:padding="10dp"
+        android:textAlignment="gravity"
+
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textViewCalculation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:padding="10dp"
-        android:gravity="bottom|right"
-        android:textAlignment="gravity"/>
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
         android:id="@+id/textViewCalculation"
@@ -26,134 +49,200 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
+        android:padding="10dp"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+
         app:layout_constraintBottom_toTopOf="@id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        android:padding="10dp"
-        android:textAlignment="viewEnd" />
-
-    <GridLayout
+    <TableLayout
         android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="4"
 
         android:orientation="horizontal"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
 
-        android:padding="10dp">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/btnC"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:text="C" />
+        <TableRow
+            android:id="@+id/scientificFunctions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone">
 
-        <Button
-            android:id="@+id/CE"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:text="CE" />
+            <Button
+                android:id="@+id/btnSin"
+                android:layout_gravity="fill"
+                android:onClick="btnClickNum"
+                android:text="sin" />
 
-        <Button
-            android:id="@+id/btn7"
-            android:text="7"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btnCos"
+                android:layout_gravity="fill"
+                android:onClick="btnClickNum"
+                android:text="cos" />
 
-        <Button
-            android:id="@+id/btn8"
-            android:text="8"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btnTan"
+                android:layout_gravity="fill"
+                android:onClick="btnClickNum"
+                android:text="tan" />
 
-        <Button
-            android:id="@+id/btn9"
-            android:text="9"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btnSqrt"
+                android:layout_gravity="fill"
+                android:onClick="btnClickNum"
+                android:text="sqrt" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/btnDivide"
-            android:text="/"
-            android:onClick="btnClickNum"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn4"
-            android:text="4"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btnC"
+                android:layout_gravity="fill"
+                android:layout_weight="2"
+                android:onClick="btnClickClear"
+                android:text="C" />
 
-        <Button
-            android:id="@+id/btn5"
-            android:text="5"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/CE"
+                android:layout_gravity="fill"
+                android:layout_weight="2"
+                android:onClick="btnClickClearEverything"
+                android:text="CE" />
 
-        <Button
-            android:id="@+id/btn6"
-            android:text="6"
-            android:onClick="btnClickNum"/>
+        </TableRow>
 
-        <Button
-            android:id="@+id/btnMultiply"
-            android:text="*"
-            android:onClick="btnClickNum"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <Button
-            android:id="@+id/btn1"
-            android:text="1"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btn7"
+                android:onClick="btnClickNum"
+                android:text="7" />
 
-        <Button
-            android:id="@+id/btn2"
-            android:text="2"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btn8"
+                android:onClick="btnClickNum"
+                android:text="8" />
 
-        <Button
-            android:id="@+id/btn3"
-            android:text="3"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btn9"
+                android:onClick="btnClickNum"
+                android:text="9" />
 
-        <Button
-            android:id="@+id/btnSubtract"
-            android:text="-"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btnDivide"
+                android:onClick="btnClickNum"
+                android:text="/" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/btn0"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:text="0"
-            android:onClick="btnClickNum"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <Button
-            android:id="@+id/btnDecimal"
-            android:text="."
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btn4"
+                android:onClick="btnClickNum"
+                android:text="4" />
 
-        <Button
-            android:id="@+id/btnAdd"
-            android:text="+"
-            android:onClick="btnClickNum"/>
+            <Button
+                android:id="@+id/btn5"
+                android:onClick="btnClickNum"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/btn6"
+                android:onClick="btnClickNum"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/btnMultiply"
+                android:onClick="btnClickNum"
+                android:text="*" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btn1"
+                android:onClick="btnClickNum"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:onClick="btnClickNum"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/btn3"
+                android:onClick="btnClickNum"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/btnSubtract"
+                android:onClick="btnClickNum"
+                android:text="-" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btn0"
+                android:layout_gravity="fill"
+                android:layout_weight="2"
+                android:onClick="btnClickNum"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/btnDecimal"
+                android:onClick="btnClickNum"
+                android:text="." />
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:onClick="btnClickNum"
+                android:text="+" />
+        </TableRow>
 
 
-        <Button
-            android:id="@+id/btnMemoryRead"
-            android:text="MR" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <Button
-            android:id="@+id/btnMemorySave"
-            android:text="MS" />
+            <Button
+                android:id="@+id/btnMemoryRead"
+                android:longClickable="true"
+                android:text="MR" />
 
-        <Button
-            android:id="@+id/btnEnter"
-            android:text="⏎"
-            android:onClick="btnClickEnter"/>
+            <Button
+                android:id="@+id/btnMemorySave"
+                android:longClickable="true"
+                android:text="MS" />
 
-        <Button
-            android:id="@+id/btnEquals"
-            android:text="="
-            android:onClick="btnClickEquals"/>
+            <Button
+                android:id="@+id/btnEnter"
+                android:onClick="btnClickEnter"
+                android:text="⏎" />
 
-    </GridLayout>
+            <Button
+                android:id="@+id/btnEquals"
+                android:onClick="btnClickEquals"
+                android:text="=" />
+        </TableRow>
+
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
