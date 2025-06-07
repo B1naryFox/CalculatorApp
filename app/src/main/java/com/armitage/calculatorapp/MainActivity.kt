@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if (findViewById<View>(R.id.portraitLayout) != null)
+            scientificFunction.visibility = View.GONE
             menuInflater.inflate(R.menu.options_menu, menu)
 
         return true
