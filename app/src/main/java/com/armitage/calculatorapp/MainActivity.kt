@@ -8,11 +8,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.math.tan
+import kotlin.math.*
 import androidx.core.view.isGone
 
 class MainActivity : AppCompatActivity() {
@@ -59,13 +57,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.options_menu, menu)
+        if (findViewById<View>(R.id.portraitLayout) != null)
+            menuInflater.inflate(R.menu.options_menu, menu)
+
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuSettings -> {
-                //TODO make buttons visible
                 if (scientificFunction.isGone) scientificFunction.visibility = View.VISIBLE
                 else scientificFunction.visibility = View.GONE
                 true
@@ -103,23 +102,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun btnClickEquals(view: View){
-        calculationStack = textToList(textViewCalculation.text.toString())
-        val result = calculateEquation(calculationStack).last().toString()
-        stringBuilder.append(textViewHistory.text)
-        stringBuilder.append(textViewCalculation.text)
-        stringBuilder.append("\n=")
-        stringBuilder.append(result)
-        stringBuilder.append("\n")
-        textViewHistory.text = stringBuilder.toString()
-        stringBuilder.clear()
+        try {
+            calculationStack = textToList(textViewCalculation.text.toString())
+            val result = calculateEquation(calculationStack).last().toString()
+            stringBuilder.append(textViewHistory.text)
+            stringBuilder.append(textViewCalculation.text)
+            stringBuilder.append("\n=")
+            stringBuilder.append(result)
+            stringBuilder.append("\n")
+            textViewHistory.text = stringBuilder.toString()
+            stringBuilder.clear()
 
-        stringBuilder.append(result)
-        textViewCalculation.text = stringBuilder.toString()
-        stringBuilder.clear()
-
+            stringBuilder.append(result)
+            textViewCalculation.text = stringBuilder.toString()
+            stringBuilder.clear()
+        } catch (e: Exception) {
+            btnClickClear(view)
+            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    fun btnClickClear(view: View) {
+    fun btnClickClearEntry(view: View) {
         stringBuilder.append(textViewCalculation.text.toString())
         if(stringBuilder.isNotEmpty()){
             stringBuilder.deleteCharAt(stringBuilder.length - 1);
@@ -127,38 +130,42 @@ class MainActivity : AppCompatActivity() {
         textViewCalculation.text = stringBuilder.toString()
         stringBuilder.clear()
     }
-    fun btnClickClearEverything(view: View) {
+    fun btnClickClear(view: View) {
         textViewCalculation.text = ""
     }
 
-    // TODO only works if the operation is in the first 3 places in the stack, needs to be adjusted to work with longer terms
-    // TODO throw errors if the term is not a calculable
-    private fun calculateEquation (calculationStack : MutableList<String>) : MutableList<String>{
-        var i :Int = 0
-        while (calculationStack.size > 1){
+    private fun calculateEquation(calculationStack: MutableList<String>): MutableList<String> {
+        val stack = mutableListOf<Double>()
 
-            if(calculationStack[i+1] in arrayOf("sin", "cos", "tan", "sqrt")){
-                val temp = calculateSingleTerm(calculationStack[i].toDouble(), calculationStack[i+1])
-                calculationStack.removeAt(i)
-                calculationStack[i] = temp.toString()
+        try {
+            for (token in calculationStack) {
+                when {
+                    token.toDoubleOrNull() != null -> {
+                        stack.add(token.toDouble())
+                    }
+                    token in arrayOf("sin", "cos", "tan", "sqrt") -> {
+                        if (stack.isEmpty()) throw IllegalArgumentException("Insufficient operands for '$token'")
+                        val operand = stack.removeAt(stack.lastIndex)
+                        stack.add(calculateSingleTerm(operand, token))
+                    }
+                    token in arrayOf("+", "-", "*", "/") -> {
+                        if (stack.size < 2) throw IllegalArgumentException("Insufficient operands for '$token'")
+                        val operandB = stack.removeAt(stack.lastIndex)
+                        val operandA = stack.removeAt(stack.lastIndex)
+                        stack.add(calculateSingleTerm(operandA, operandB, token))
+                    }
+                    else -> {
+                        throw IllegalArgumentException("Unknown token: $token")
+                    }
+                }
             }
 
-            else if (calculationStack[i+2] in arrayOf("+", "-", "*", "/")){
-                val temp = calculateSingleTerm(calculationStack[i].toDouble(), calculationStack[i+1].toDouble(), calculationStack[i+2])
-                calculationStack.removeAt(i)
-                calculationStack.removeAt(i)
-                calculationStack[i] = temp.toString()
-            }
-
-            else if (calculationStack[i+2] in arrayOf("sin", "cos", "tan", "sqrt")){
-                val temp = calculateSingleTerm(calculationStack[i+1].toDouble(), calculationStack[i+2])
-                calculationStack.removeAt(i+1)
-                calculationStack[i+1] = temp.toString()
-            }
+            return stack.map { it.toString() }.toMutableList()
+        } catch (e: Exception) {
+            throw Exception("Error while calculating: ${e.message}", e)
         }
-
-        return calculationStack
     }
+
 
     private fun calculateSingleTerm (operandA: Double, operandB: Double, operator: String) : Double{
         when (operator){
@@ -175,9 +182,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun calculateSingleTerm (operand: Double, operator: String) : Double{
         when(operator){
-            "sin" -> return sin(operand)
-            "cos" -> return cos(operand)
-            "tan" -> return tan(operand)
+            "sin" -> return sin(Math.toRadians(operand))
+            "cos" -> return cos(Math.toRadians(operand))
+            "tan" -> return tan(Math.toRadians(operand))
             "sqrt" -> return sqrt(operand)
         }
         return 0.0
